@@ -282,10 +282,73 @@ Put these versions in order from oldest to newest:
 ## ✅ Self-Check
 
 - [ ] Explain what a build process does
+
+<details>
+<summary>Answer</summary>
+
+The build process transforms human-readable source code into a deployable application. It includes: **compiling** source code into bytecode/binaries, **resolving dependencies** (downloading libraries the code needs), **running tests** to verify correctness, **packaging** everything into a deployable artifact (JAR, WAR, Docker image), and optionally **static analysis** (code quality checks). Without a build process, you'd have to manually compile files, manage library versions, and assemble the application — error-prone and unreproducible.
+
+</details>
+
 - [ ] Understand the Maven build lifecycle phases
+
+<details>
+<summary>Answer</summary>
+
+Maven has a default lifecycle with key phases that run in order: **validate** (check project is correct), **compile** (compile source code), **test** (run unit tests), **package** (create JAR/WAR file), **verify** (run integration tests), **install** (install artifact to local repository), **deploy** (upload artifact to remote repository). Running a later phase automatically runs all previous phases — e.g., `mvn package` runs validate → compile → test → package. You can skip tests with `-DskipTests`.
+
+</details>
+
 - [ ] Read a `pom.xml` and identify key information
+
+<details>
+<summary>Answer</summary>
+
+`pom.xml` is Maven's project configuration file. Key sections: **`<groupId>`** — organization identifier (e.g., `com.example`), **`<artifactId>`** — project name (e.g., `my-app`), **`<version>`** — current version (e.g., `1.2.0-SNAPSHOT`), **`<dependencies>`** — libraries the project uses (Spring Boot, JUnit, etc.), **`<build><plugins>`** — build plugins (compiler settings, test plugins), **`<properties>`** — shared settings like Java version. The `<parent>` section often references Spring Boot's parent POM for default configurations.
+
+</details>
+
 - [ ] Know common Maven/Gradle commands
+
+<details>
+<summary>Answer</summary>
+
+**Maven**: `mvn clean` (delete previous build), `mvn compile` (compile code), `mvn test` (run unit tests), `mvn package` (create JAR/WAR), `mvn verify` (run integration tests), `mvn clean install` (clean + full build + install locally), `mvn package -DskipTests` (build without tests). **Gradle**: `gradle build` (full build), `gradle test` (run tests), `gradle clean` (delete build output), `gradle bootJar` (create Spring Boot JAR). Both tools download dependencies automatically on first run.
+
+</details>
+
 - [ ] Explain what JAR, WAR, and Docker images are
+
+<details>
+<summary>Answer</summary>
+
+**JAR (Java Archive)** — a ZIP file containing compiled Java classes and resources; used for libraries and standalone applications (`java -jar app.jar`). **WAR (Web Application Archive)** — a JAR with web application structure; deployed to application servers like Tomcat. **Docker image** — a lightweight, standalone package containing the application, its runtime (JDK), OS libraries, and configuration; runs in containers that work identically on any machine. Modern practice: package the JAR inside a Docker image for consistent deployment.
+
+</details>
+
 - [ ] Read build logs and identify errors
+
+<details>
+<summary>Answer</summary>
+
+Build logs show each phase. Look for: **`BUILD FAILURE`** — the build failed (scroll up for details). **`COMPILATION ERROR`** — code doesn't compile (syntax error, missing import). **`Tests run: X, Failures: Y`** — test failures. **`Could not resolve dependencies`** — a library can't be downloaded (wrong version, network issue). **`OutOfMemoryError`** — build needs more memory. The error message usually includes the file name, line number, and description. Successful builds end with **`BUILD SUCCESS`**.
+
+</details>
+
 - [ ] Understand semantic versioning (major.minor.patch)
+
+<details>
+<summary>Answer</summary>
+
+Semantic versioning follows the format **MAJOR.MINOR.PATCH** (e.g., `2.4.1`). **MAJOR** (2) — incremented for breaking/incompatible changes (existing users must update their code). **MINOR** (4) — incremented for new features that are backward-compatible (existing functionality still works). **PATCH** (1) — incremented for backward-compatible bug fixes. Examples: `1.0.0` → `1.0.1` (bug fix), `1.0.1` → `1.1.0` (new feature), `1.1.0` → `2.0.0` (breaking change). Pre-release versions: `1.0.0-alpha`, `1.0.0-beta`, `1.0.0-RC1`.
+
+</details>
+
 - [ ] Explain the difference between SNAPSHOT and RELEASE versions
+
+<details>
+<summary>Answer</summary>
+
+**SNAPSHOT** (e.g., `1.2.0-SNAPSHOT`) is a development version — it's unstable, can change at any time, and Maven re-downloads it to get the latest build. Used during active development. **RELEASE** (e.g., `1.2.0`) is a stable, immutable version — once published, it never changes. Used for production deployments. The workflow: develop on `1.2.0-SNAPSHOT` → when ready, release as `1.2.0` → start developing `1.3.0-SNAPSHOT`. Never deploy SNAPSHOTs to production.
+
+</details>

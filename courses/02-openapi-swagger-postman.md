@@ -545,10 +545,73 @@ pm.test("Each user has required fields", function () {
 After completing this course, you should be able to:
 
 - [ ] Explain what REST API is and how resources/endpoints work
+
+<details>
+<summary>Answer</summary>
+
+A REST API is a web service that follows REST (Representational State Transfer) principles. It uses **HTTP methods** (GET, POST, PUT, DELETE) to perform operations on **resources** identified by URLs. For example, `/api/users` is a resource representing all users, and `/api/users/42` is a specific user. REST APIs are **stateless** (each request is self-contained) and typically use **JSON** for data exchange. Endpoints are the specific URL + method combinations the API exposes (e.g., `GET /api/users`, `POST /api/users`).
+
+</details>
+
 - [ ] Read an OpenAPI specification and understand its structure
+
+<details>
+<summary>Answer</summary>
+
+An OpenAPI spec is a YAML/JSON document describing a REST API. Key sections: **`info`** (API name, version, description), **`servers`** (base URLs for different environments), **`paths`** (all endpoints with their methods, parameters, request bodies, and responses), and **`components/schemas`** (reusable data models). Parameters can be in the **path** (`/users/{id}`), **query** (`?role=qa`), **header**, or **cookie**. The `required` field indicates mandatory parameters, and `enum` lists allowed values.
+
+</details>
+
 - [ ] Use Swagger UI to explore and test API endpoints
+
+<details>
+<summary>Answer</summary>
+
+Swagger UI renders an OpenAPI spec as an interactive web page (usually at `/swagger-ui.html` or `/api-docs`). To test an endpoint: browse the available endpoints, click to expand one, click **"Try it out"**, fill in parameters and request body, click **"Execute"**, and inspect the response (status code, headers, body). As QA, always verify that Swagger documentation matches actual API behavior, test edge cases not shown in examples, and check schemas for required fields and validation rules.
+
+</details>
+
 - [ ] Make GET, POST, PUT, DELETE requests in Postman
+
+<details>
+<summary>Answer</summary>
+
+In Postman: click **"+"** for a new request tab, select the HTTP method from the dropdown, enter the URL, configure headers/body as needed, and click **Send**. For GET, you typically just need the URL. For POST/PUT, go to the **Body** tab, select **raw** and **JSON**, then enter the JSON payload. The response appears below with status code, time, and body. Use the **Params** tab to add query parameters.
+
+</details>
+
 - [ ] Set up authentication in Postman
+
+<details>
+<summary>Answer</summary>
+
+Go to the **Authorization** tab of a request and select the auth type. Common types: **Bearer Token** (sends `Authorization: Bearer <token>` header — paste your JWT or API token), **Basic Auth** (enter username and password, Postman encodes them in Base64), **API Key** (sends a key as a header or query parameter). You can also set auth at the collection level so all requests inherit it.
+
+</details>
+
 - [ ] Write basic test scripts in Postman
+
+<details>
+<summary>Answer</summary>
+
+In the **Tests** tab, write JavaScript assertions using `pm.test()`. Examples: `pm.test("Status is 200", () => { pm.response.to.have.status(200); });` checks the status code. `pm.expect(pm.response.json()).to.have.property('id');` checks for a field. `pm.expect(pm.response.responseTime).to.be.below(500);` checks performance. `pm.response.to.have.header("Content-Type", "application/json; charset=utf-8");` checks headers.
+
+</details>
+
 - [ ] Import a Swagger/OpenAPI spec into Postman
+
+<details>
+<summary>Answer</summary>
+
+In Postman, click **"Import"** (top left), then choose **File** (upload a YAML/JSON file), **Link** (paste the URL to the spec, e.g., `https://api.example.com/v3/api-docs`), or **Raw text** (paste the spec content). Postman creates a collection with all endpoints pre-configured, including parameters and example bodies. You then set up the environment (base URL, auth tokens) and start testing.
+
+</details>
+
 - [ ] Understand the relationship between OpenAPI spec, Swagger UI, and Postman
+
+<details>
+<summary>Answer</summary>
+
+The **OpenAPI specification** is the single source of truth — a machine-readable document describing the API contract. **Swagger UI** is a visualization tool that renders the spec as interactive documentation in a browser, allowing quick exploration and testing. **Postman** is a full-featured API testing tool where you can import the spec, organize requests into collections, write test scripts, manage environments, and run automated test suites. The spec feeds both tools: Swagger UI for documentation/exploration, Postman for systematic testing.
+
+</details>

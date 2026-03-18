@@ -292,9 +292,70 @@ Create a deployment verification checklist that QA should follow after every dep
 ## ✅ Self-Check
 
 - [ ] Explain the purpose of each environment (dev, QA, staging, prod)
+
+<details>
+<summary>Answer</summary>
+
+**Development (Dev)** — where developers run and test their code locally or on a shared dev server; unstable, frequently changing. **QA / Testing** — dedicated environment for QA to test features, run automated tests, and verify bug fixes; more stable than dev. **Staging** — a near-exact replica of production; used for final verification, performance testing, and stakeholder demos before release. **Production (Prod)** — the live environment serving real users; highest stability requirements, changes go through all previous environments first. Each environment may have different configurations (database, API keys, feature flags).
+
+</details>
+
 - [ ] Describe rolling, blue-green, and canary deployment strategies
+
+<details>
+<summary>Answer</summary>
+
+**Rolling deployment** — gradually replaces old instances with new ones, one at a time; no downtime, but both versions run simultaneously during the rollout; risk: if the new version has a bug, some users are affected before it's caught. **Blue-green deployment** — maintains two identical environments (blue = current, green = new); deploy to green, test it, then switch traffic from blue to green; instant rollback by switching back to blue. **Canary deployment** — routes a small percentage of traffic (e.g., 5%) to the new version first; monitor for errors; gradually increase traffic if healthy; safest but most complex.
+
+</details>
+
 - [ ] Explain what Docker containers are and why they're useful
+
+<details>
+<summary>Answer</summary>
+
+A **Docker container** is a lightweight, isolated runtime environment that packages an application with everything it needs to run (code, runtime, libraries, OS dependencies). Benefits: **consistency** — "works on my machine" problem is eliminated; the container runs identically everywhere. **Isolation** — containers don't interfere with each other. **Portability** — runs on any machine with Docker installed. **Scalability** — easy to spin up multiple instances. **Reproducibility** — same image produces the same behavior every time. Containers are created from Docker **images** (immutable templates).
+
+</details>
+
 - [ ] Know basic kubectl commands to check pod status and logs
+
+<details>
+<summary>Answer</summary>
+
+- `kubectl get pods` — list all pods and their status (Running, Pending, CrashLoopBackOff, Error)
+- `kubectl get pods -n <namespace>` — list pods in a specific namespace
+- `kubectl describe pod <name>` — detailed pod info, events, error reasons
+- `kubectl logs <pod-name>` — view application logs from a pod
+- `kubectl logs <pod-name> --previous` — view logs from a crashed/restarted pod
+- `kubectl get deployments` — check deployment status and replica counts
+- `kubectl rollout status deployment/<name>` — watch deployment progress
+
+</details>
+
 - [ ] Understand when and how to rollback a deployment
+
+<details>
+<summary>Answer</summary>
+
+**When to rollback**: increased error rates after deployment, health checks failing, critical bugs found in production, performance degradation, or user-reported issues. **How to rollback**: in Kubernetes: `kubectl rollout undo deployment/<name>` reverts to the previous version. In blue-green: switch traffic back to the blue (old) environment. In CI/CD: re-deploy the previous known-good artifact version. Always have a rollback plan **before** deploying. Rollbacks should be fast (minutes, not hours) and tested as part of the deployment process.
+
+</details>
+
 - [ ] Know what health checks are and what to monitor after deployment
+
+<details>
+<summary>Answer</summary>
+
+**Health checks** are automated probes that verify an application is running correctly. **Liveness check** — is the app alive? (restart if not). **Readiness check** — is the app ready to receive traffic? (remove from load balancer if not). After deployment, monitor: **error rates** (4xx/5xx responses), **response times** (latency), **CPU/memory usage**, **application logs** for exceptions, **database connections**, and **key business metrics** (e.g., orders per minute). Compare post-deployment metrics against pre-deployment baselines.
+
+</details>
+
 - [ ] Create a deployment verification checklist
+
+<details>
+<summary>Answer</summary>
+
+Post-deployment checklist: ✅ Application is running (health endpoint returns 200). ✅ Smoke tests pass (critical paths work — login, main features). ✅ Error rate is normal (no spike in 5xx errors). ✅ Response times are normal (no performance degradation). ✅ Logs show no unexpected errors or exceptions. ✅ Database migrations completed successfully. ✅ External integrations are working (APIs, third-party services). ✅ Monitoring dashboards look healthy. ✅ Key business metrics are stable. ✅ Rollback plan is confirmed and ready if needed.
+
+</details>

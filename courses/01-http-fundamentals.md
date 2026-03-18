@@ -474,11 +474,114 @@ Think about these situations and answer:
 After completing this course, you should be able to:
 
 - [ ] Explain what HTTP is and how request-response works
+
+<details>
+<summary>Answer</summary>
+
+HTTP (HyperText Transfer Protocol) is the foundation of data communication on the web. It works using a **request-response model**: a client (browser or app) sends an **HTTP request** to a server, the server processes it and sends back an **HTTP response**. Key characteristics: HTTP is **stateless** (each request is independent), **text-based** (human-readable in HTTP/1.1), and the client always initiates communication. HTTPS adds TLS/SSL encryption on top of HTTP to protect data in transit.
+
+</details>
+
 - [ ] Name all major HTTP methods and when to use each
+
+<details>
+<summary>Answer</summary>
+
+- **GET** — Retrieve data (e.g., get a user profile). Safe & idempotent.
+- **POST** — Create new data (e.g., create a new user). Not safe, not idempotent.
+- **PUT** — Replace a resource completely (e.g., update all fields of a user). Idempotent.
+- **PATCH** — Partially update a resource (e.g., change only the user's email). Not idempotent.
+- **DELETE** — Remove a resource (e.g., delete a user). Idempotent.
+- **HEAD** — Same as GET but returns only headers, no body. Safe & idempotent.
+- **OPTIONS** — Check what methods are available for a resource. Safe & idempotent.
+
+</details>
+
 - [ ] Distinguish between PUT and PATCH
+
+<details>
+<summary>Answer</summary>
+
+**PUT** replaces the **entire** resource — you must send all fields, even those that haven't changed. If you omit a field, it may be set to null. **PATCH** updates only the **specific fields** you include in the request body, leaving everything else unchanged. Use PUT when you want to overwrite the whole object; use PATCH when you want to modify just one or a few fields.
+
+</details>
+
 - [ ] Read and understand HTTP headers
+
+<details>
+<summary>Answer</summary>
+
+HTTP headers are **key-value pairs** that carry metadata about the request or response. Common request headers include: `Content-Type` (format of the body, e.g., `application/json`), `Authorization` (authentication credentials, e.g., `Bearer <token>`), `Accept` (what format the client wants back), `Host` (the server's domain), and `User-Agent` (info about the client). Common response headers include: `Content-Type`, `Content-Length`, `Set-Cookie`, `Location` (for redirects), and `Access-Control-Allow-Origin` (CORS).
+
+</details>
+
 - [ ] Know the main status codes by heart (200, 201, 400, 401, 403, 404, 500)
+
+<details>
+<summary>Answer</summary>
+
+- **200 OK** — Request succeeded (general success)
+- **201 Created** — A new resource was successfully created (typically after POST)
+- **400 Bad Request** — The client sent an invalid request (e.g., malformed JSON, missing required fields)
+- **401 Unauthorized** — The client is not authenticated (needs to log in)
+- **403 Forbidden** — The client is authenticated but doesn't have permission to access the resource
+- **404 Not Found** — The requested resource doesn't exist
+- **500 Internal Server Error** — Something went wrong on the server side
+
+</details>
+
 - [ ] Explain the difference between 401 and 403
+
+<details>
+<summary>Answer</summary>
+
+**401 Unauthorized** means the client is **not authenticated** — the server doesn't know who you are (no token, expired token, or invalid credentials). The solution is to log in or provide valid credentials. **403 Forbidden** means the client **is authenticated** (the server knows who you are) but you **don't have permission** to access the requested resource. For example, a regular user trying to access an admin-only endpoint would get 403.
+
+</details>
+
 - [ ] Construct HTTP requests for common API operations
+
+<details>
+<summary>Answer</summary>
+
+Examples of common API requests:
+- **List resources**: `GET /api/users` with `Accept: application/json`
+- **Get single resource**: `GET /api/users/42`
+- **Create resource**: `POST /api/users` with `Content-Type: application/json` and a JSON body containing the new resource's data
+- **Update resource**: `PUT /api/users/42` (full replacement) or `PATCH /api/users/42` (partial update) with JSON body
+- **Delete resource**: `DELETE /api/users/42`
+- **Filter/paginate**: `GET /api/users?role=qa&page=1&limit=20&sort=name`
+
+</details>
+
 - [ ] Use `curl` to make HTTP requests from the terminal
+
+<details>
+<summary>Answer</summary>
+
+Basic curl examples:
+- **GET**: `curl -v https://api.example.com/users`
+- **POST with JSON**: `curl -v -X POST https://api.example.com/users -H "Content-Type: application/json" -d '{"name":"Nastya"}'`
+- **With auth**: `curl -v -H "Authorization: Bearer <token>" https://api.example.com/users`
+- **Headers only**: `curl -I https://api.example.com/users`
+- **PUT**: `curl -v -X PUT https://api.example.com/users/42 -H "Content-Type: application/json" -d '{"name":"Updated"}'`
+- **DELETE**: `curl -v -X DELETE https://api.example.com/users/42`
+
+The `-v` (verbose) flag shows full request and response details including headers.
+
+</details>
+
 - [ ] Parse a URL into its components (scheme, host, path, query params)
+
+<details>
+<summary>Answer</summary>
+
+Given `https://api.example.com:443/api/v2/users?role=qa&active=true#section1`:
+- **Scheme**: `https` — the protocol
+- **Host**: `api.example.com` — the server address
+- **Port**: `443` — network port (default for HTTPS)
+- **Path**: `/api/v2/users` — the resource location
+- **Query Parameters**: `role=qa&active=true` — filters/options passed as key-value pairs after `?`, separated by `&`
+- **Fragment**: `section1` — client-side anchor (not sent to server)
+
+</details>

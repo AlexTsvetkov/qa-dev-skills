@@ -333,9 +333,71 @@ Tests run: 25, Failures: 3, Errors: 1, Skipped: 2
 ## ✅ Self-Check
 
 - [ ] Explain the testing pyramid and each level
+
+<details>
+<summary>Answer</summary>
+
+The testing pyramid has three levels. **Unit tests** (base, largest layer) — test individual methods/functions in isolation, fast, cheap, run in milliseconds. **Integration tests** (middle layer) — test how components work together (e.g., service + database, API + external service), slower, need infrastructure. **E2E / UI tests** (top, smallest layer) — test the full application from the user's perspective through the UI, slowest, most brittle, most expensive. The pyramid shape means: write many unit tests, fewer integration tests, and fewest E2E tests.
+
+</details>
+
 - [ ] Describe the difference between unit, integration, and E2E tests
+
+<details>
+<summary>Answer</summary>
+
+**Unit tests** test a single class/method in isolation — dependencies are mocked (e.g., test `UserService.createUser()` without a real database). They run in milliseconds and catch logic errors. **Integration tests** test multiple components together — real database, real HTTP calls (e.g., send a POST request to the API and verify it saves to the database). They take seconds and catch wiring/configuration errors. **E2E tests** test the entire system through the UI — a browser clicks buttons, fills forms, and verifies results. They take minutes and catch workflow/UI errors.
+
+</details>
+
 - [ ] Read a JUnit/REST Assured test and understand what it tests
+
+<details>
+<summary>Answer</summary>
+
+A JUnit test has: `@Test` annotation marking the test method, a descriptive method name (e.g., `shouldReturn404WhenUserNotFound`), the **Arrange-Act-Assert** pattern — set up data, perform the action, check the result. REST Assured tests read like English: `given().contentType(JSON).body(request).when().post("/api/users").then().statusCode(201).body("name", equalTo("Nastya"))`. Key parts: `given()` — request setup, `when()` — the HTTP call, `then()` — assertions on the response.
+
+</details>
+
 - [ ] Understand common assertions (`assertEquals`, `assertThrows`, etc.)
+
+<details>
+<summary>Answer</summary>
+
+- `assertEquals(expected, actual)` — checks two values are equal
+- `assertNotNull(value)` — checks value is not null
+- `assertTrue(condition)` / `assertFalse(condition)` — checks boolean conditions
+- `assertThrows(Exception.class, () -> code)` — verifies an exception is thrown
+- `assertThat(value, is(expected))` — Hamcrest matcher style, more readable
+- REST Assured: `statusCode(200)`, `body("name", equalTo("Nastya"))`, `body("items", hasSize(3))`
+
+When an assertion fails, the test fails and reports expected vs actual values.
+
+</details>
+
 - [ ] Read a test report and identify failures vs errors
+
+<details>
+<summary>Answer</summary>
+
+A test report shows: **Passed** (green) — test ran and all assertions succeeded. **Failed** (red) — test ran but an assertion didn't match (e.g., expected 200 but got 500) — this usually means a bug in the application. **Error** (red/orange) — test couldn't run due to an unexpected exception (e.g., NullPointerException, connection timeout) — this might be a test infrastructure problem or a crash. **Skipped** (yellow/grey) — test was intentionally skipped (e.g., `@Disabled`). Focus on failures first (likely real bugs), then errors (might be environment issues).
+
+</details>
+
 - [ ] Write test scenarios for an API endpoint
+
+<details>
+<summary>Answer</summary>
+
+For `POST /api/users` with body `{name, email, role}`, write scenarios covering: **Happy path** — valid data returns 201 with created user. **Validation errors** — missing name (400), invalid email (400), empty body (400). **Business logic** — duplicate email (409). **Not found** — GET/PUT/DELETE non-existent user (404). **Boundary values** — name at min/max length, special characters. **Security** — unauthorized request (401), forbidden action (403). **Edge cases** — extra fields in body, wrong Content-Type, concurrent requests. Each scenario should specify: input, expected status code, and expected response body.
+
+</details>
+
 - [ ] Explain why automated tests are important for CI/CD
+
+<details>
+<summary>Answer</summary>
+
+Automated tests are the **safety net** that makes CI/CD possible. Without them, every code change would need manual verification before deployment — making continuous delivery impossible. Benefits: **fast feedback** (know within minutes if a change broke something), **regression prevention** (old features don't break when adding new ones), **confidence to deploy** (if all tests pass, the code is likely safe), **documentation** (tests show how the code should behave), and **enables frequent releases** (can deploy daily instead of monthly because testing is automated).
+
+</details>

@@ -822,12 +822,104 @@ If you don't have access to a real application, use the [Spring Petclinic](https
 After completing this course, you should be able to:
 
 - [ ] Explain the difference between frontend and backend
+
+<details>
+<summary>Answer</summary>
+
+The **frontend** is the client-side part that users see and interact with (HTML, CSS, JavaScript, React, etc.) — it runs in the browser. The **backend** is the server-side part that handles business logic, data processing, and database access — it runs on a server. The frontend sends HTTP requests to the backend API, the backend processes them (validates data, applies business rules, queries the database), and returns HTTP responses. Frontend focuses on UI/UX; backend focuses on data, logic, and security.
+
+</details>
+
 - [ ] Describe the layers: Controller → Service → Repository → Database
+
+<details>
+<summary>Answer</summary>
+
+A typical Spring Boot backend has layered architecture: **Controller** receives HTTP requests, extracts parameters/body, and delegates to the Service layer. **Service** contains business logic (validation rules, calculations, orchestration). **Repository** handles database operations (CRUD queries using Spring Data JPA). **Database** stores the actual data. Each layer has a single responsibility: Controller handles HTTP concerns, Service handles business rules, Repository handles data persistence. This separation makes the code testable and maintainable.
+
+</details>
+
 - [ ] Read a Spring Boot controller and understand what endpoints it exposes
+
+<details>
+<summary>Answer</summary>
+
+Look for `@RestController` on the class and `@RequestMapping("/api/...")` for the base path. Each method has a mapping annotation: `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` with optional path. Method parameters annotated with `@PathVariable` come from the URL path, `@RequestParam` from query parameters, and `@RequestBody` from the request body. The return type (often a DTO or `ResponseEntity`) determines the response body. For example, `@GetMapping("/users/{id}")` with `@PathVariable Long id` exposes `GET /api/users/{id}`.
+
+</details>
+
 - [ ] Understand what annotations like `@GetMapping`, `@RequestBody`, `@PathVariable` do
+
+<details>
+<summary>Answer</summary>
+
+- `@GetMapping("/path")` — maps HTTP GET requests to this method
+- `@PostMapping("/path")` — maps HTTP POST requests
+- `@PutMapping` / `@DeleteMapping` — maps PUT / DELETE requests
+- `@RequestBody` — deserializes the JSON request body into a Java object
+- `@PathVariable` — extracts a value from the URL path (e.g., `{id}` in `/users/{id}`)
+- `@RequestParam` — extracts a query parameter (e.g., `?role=qa`)
+- `@RestController` — marks the class as a REST API controller
+- `@RequestMapping("/api")` — sets the base URL path for all endpoints in the class
+
+</details>
+
 - [ ] Trace how an HTTP request travels through the backend
+
+<details>
+<summary>Answer</summary>
+
+1. HTTP request arrives at the server (e.g., `POST /api/users` with JSON body)
+2. **Spring DispatcherServlet** routes it to the correct Controller method based on path and HTTP method
+3. **Controller** extracts parameters (`@PathVariable`, `@RequestBody`, etc.) and calls the Service
+4. **Service** applies business logic and validation, then calls the Repository
+5. **Repository** executes the database query (e.g., `save()`, `findById()`)
+6. **Database** stores/retrieves data and returns results
+7. Results flow back: Repository → Service → Controller → HTTP Response (with status code, headers, JSON body)
+
+</details>
+
 - [ ] Understand how validation works and design test cases from validation rules
+
+<details>
+<summary>Answer</summary>
+
+Java uses validation annotations on DTO/model fields: `@NotNull` (field required), `@NotBlank` (non-empty string), `@Size(min=2, max=100)` (length limits), `@Email` (valid email format), `@Min`/`@Max` (numeric range), `@Pattern` (regex). The controller uses `@Valid` to trigger validation. Test cases to derive: send null for `@NotNull` fields, empty string for `@NotBlank`, strings shorter/longer than `@Size`, invalid email for `@Email`, boundary values for `@Min`/`@Max`. Each should return 400 Bad Request with a descriptive error message.
+
+</details>
+
 - [ ] Read backend log output and identify errors
+
+<details>
+<summary>Answer</summary>
+
+Backend logs use levels: **ERROR** (something broke — exceptions, stack traces), **WARN** (potential problems), **INFO** (normal operations like startup, request processing), **DEBUG** (detailed diagnostic info). Look for: `ERROR` or `Exception` keywords, **stack traces** (indented lines starting with `at ...`), HTTP status codes in request logs, SQL errors for database issues, and `NullPointerException` for missing data bugs. The first line of a stack trace shows the error type and message; subsequent lines show where it happened in the code.
+
+</details>
+
 - [ ] Explain what DTOs are and why they're used
+
+<details>
+<summary>Answer</summary>
+
+**DTO (Data Transfer Object)** is a simple Java class used to carry data between layers, especially between the API and the client. DTOs separate the API contract from the internal database model. Benefits: you can expose only the fields the client needs (e.g., hide `password` from the response), use different DTOs for requests vs responses (e.g., `CreateUserRequest` vs `UserResponse`), and add validation annotations specifically for API input. The Service layer converts between DTOs and database Entities.
+
+</details>
+
 - [ ] Know what `application.properties` / `application.yml` configures
+
+<details>
+<summary>Answer</summary>
+
+This is the main configuration file for a Spring Boot app. It configures: **server settings** (`server.port=8080`), **database connection** (`spring.datasource.url`, `username`, `password`), **JPA/Hibernate** settings (`spring.jpa.hibernate.ddl-auto`), **logging levels** (`logging.level.root=INFO`), **API paths** and **CORS settings**, and custom application properties. Different profiles (dev, staging, prod) can have different config files (`application-dev.yml`, `application-prod.yml`). As QA, check this file to understand database connections, ports, feature flags, and environment-specific behavior.
+
+</details>
+
 - [ ] Communicate more effectively with backend developers
+
+<details>
+<summary>Answer</summary>
+
+Knowing backend concepts helps QA: reference specific **layers** ("I think the bug is in the Service layer validation"), use correct **terminology** (endpoint, DTO, entity, repository), provide **precise bug reports** ("POST /api/users returns 500 with this payload — the stack trace shows NullPointerException in UserService.java:42"), ask informed **questions** ("Is there validation on the email field? What does the DTO look like?"), and understand **technical constraints** ("I see the query uses pagination — let me test with large datasets"). This builds trust and speeds up debugging.
+
+</details>

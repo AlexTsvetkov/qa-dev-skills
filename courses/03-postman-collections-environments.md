@@ -660,12 +660,91 @@ Create a request that dynamically generates test data:
 After completing this course, you should be able to:
 
 - [ ] Create and organize collections with folders
+
+<details>
+<summary>Answer</summary>
+
+In Postman, click **"New" → "Collection"**, give it a name (e.g., "User API Tests"). Right-click the collection to **"Add Folder"** — organize by feature (Users, Orders) or by test type (Smoke, Regression). Add requests to folders by right-clicking → "Add Request". You can drag and drop requests between folders. A well-organized collection mirrors your API structure and makes it easy to find and run specific groups of tests.
+
+</details>
+
 - [ ] Use variables in URLs, headers, and request bodies
+
+<details>
+<summary>Answer</summary>
+
+Use double curly braces `{{variable_name}}` anywhere in Postman. In URL: `{{baseUrl}}/api/users/{{userId}}`. In headers: `Authorization: Bearer {{authToken}}`. In body: `{"name": "{{userName}}"}`. Variables can be set at different scopes: **Global** (available everywhere), **Environment** (per environment), **Collection** (within a collection), and **Local** (within a single request execution).
+
+</details>
+
 - [ ] Explain the difference between global, environment, and collection variables
+
+<details>
+<summary>Answer</summary>
+
+**Global variables** are available across all collections and environments — use for values shared everywhere (e.g., API version). **Environment variables** are specific to a selected environment — use for values that change between dev/staging/prod (e.g., base URL, auth tokens). **Collection variables** are scoped to a single collection — use for values shared across requests in that collection but not needed elsewhere. Priority order (highest to lowest): Local → Data → Environment → Collection → Global. If the same variable name exists at multiple scopes, the most specific scope wins.
+
+</details>
+
 - [ ] Create and switch between environments (dev, staging, prod)
+
+<details>
+<summary>Answer</summary>
+
+Click **"Environments"** in the sidebar → **"+"** to create a new one. Define variables like `baseUrl`, `authToken`, `userId` with appropriate values for each environment (e.g., `http://localhost:8080` for Dev, `https://staging.example.com` for Staging). Create separate environments for each server. Switch between them using the **environment dropdown** in the top-right corner of Postman. All requests using `{{baseUrl}}` will automatically point to the correct server without changing any request configuration.
+
+</details>
+
 - [ ] Chain requests by saving response values into variables
+
+<details>
+<summary>Answer</summary>
+
+In the **Tests** tab of the first request, extract a value and save it: `const response = pm.response.json(); pm.environment.set("userId", response.id);`. In the next request, use `{{userId}}` in the URL or body. Example flow: POST `/auth/login` → extract `token` → use `{{authToken}}` in subsequent requests' Authorization header → POST `/users` → extract `id` → GET `/users/{{userId}}`. This allows you to build complete test workflows.
+
+</details>
+
 - [ ] Write pre-request scripts to generate dynamic test data
+
+<details>
+<summary>Answer</summary>
+
+In the **Pre-request Script** tab, write JavaScript that runs before the request is sent. Generate dynamic data: `pm.environment.set("randomEmail", "user_" + Date.now() + "@test.com");`. Generate timestamps: `pm.environment.set("timestamp", new Date().toISOString());`. Use built-in dynamic variables like `{{$randomFirstName}}`, `{{$randomEmail}}`, `{{$randomUUID}}` directly in request fields. This ensures each test run uses unique data, avoiding conflicts.
+
+</details>
+
 - [ ] Run collections automatically with the Collection Runner
+
+<details>
+<summary>Answer</summary>
+
+Click the **"Run"** button on a collection. Configure: select the **environment**, set **iterations** (how many times to repeat), optionally upload a **data file** (CSV/JSON) for data-driven testing, and set a **delay** between requests. Click **"Run"** to execute. The runner shows pass/fail results for each test in each request, with summary statistics. For CI/CD integration, use **Newman** (Postman's CLI tool): `newman run collection.json -e environment.json`.
+
+</details>
+
 - [ ] Use data files (CSV/JSON) for data-driven testing
+
+<details>
+<summary>Answer</summary>
+
+Create a CSV or JSON file with test data (e.g., `test-users.csv` with columns `name,email,role`). In your request, reference columns as variables: `{{name}}`, `{{email}}`. In the Collection Runner, upload the data file and set iterations to match the number of rows. Postman runs the request once per row, substituting the variables. In tests, access data with `pm.iterationData.get("name")`. This is powerful for testing the same endpoint with many different inputs.
+
+</details>
+
 - [ ] Use the Postman Console for debugging
+
+<details>
+<summary>Answer</summary>
+
+Open the Postman Console via **View → Show Postman Console** (or `Ctrl+Alt+C` / `Cmd+Alt+C`). It shows the full request as actually sent (URL, headers, body after variable resolution), full response details, and `console.log()` output from your scripts. Use it to debug: `console.log("Token:", pm.environment.get("authToken"));` in scripts. Essential for troubleshooting when requests don't work as expected — you can see exactly what Postman sent.
+
+</details>
+
 - [ ] Share collections with team members
+
+<details>
+<summary>Answer</summary>
+
+Right-click a collection → **"Export"** → choose Collection v2.1 format → save as JSON file. Share via Git, Slack, or email. Teammates click **"Import"** to load it. Export environments separately the same way. Best practice: store collection and environment JSON files in your project's Git repository. Alternatively, use **Postman Team Workspaces** (requires account) for real-time collaboration, or generate a **shareable link** for quick sharing.
+
+</details>

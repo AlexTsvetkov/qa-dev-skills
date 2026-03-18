@@ -343,9 +343,64 @@ Describe how you would use Jenkins when:
 ## ✅ Self-Check
 
 - [ ] Navigate the Jenkins UI and find jobs, builds, and logs
+
+<details>
+<summary>Answer</summary>
+
+The Jenkins **Dashboard** shows all jobs (projects). Click a job name to see its build history (list of builds with numbers like #1, #2, etc.). Each build shows status: blue circle (✅ success), red circle (❌ failed), yellow circle (⚠️ unstable). Click a build number to see details. Click **"Console Output"** to see the full log of what happened during the build. Use **"Build History"** on the left sidebar to see recent builds. The **Blue Ocean** plugin provides a more modern, visual UI.
+
+</details>
+
 - [ ] Read a Jenkinsfile and understand its stages
+
+<details>
+<summary>Answer</summary>
+
+A Jenkinsfile defines the pipeline in Groovy syntax. Key structure: `pipeline { agent any; stages { stage('Build') { steps { sh 'mvn compile' } } } }`. **`agent`** defines where the pipeline runs. **`stages`** contains sequential stages. Each **`stage`** has a name and **`steps`** with commands. **`sh`** runs shell commands. **`post`** block defines actions after pipeline completion (e.g., `always`, `success`, `failure`). The **`environment`** block sets environment variables. Read top-to-bottom — stages execute in order.
+
+</details>
+
 - [ ] Find and interpret build errors in Console Output
+
+<details>
+<summary>Answer</summary>
+
+Open the failed build → click **"Console Output"**. Scroll to the bottom to find the error (failures are usually near the end). Look for: **`ERROR`** or **`FAILURE`** keywords, **`BUILD FAILURE`** (Maven/Gradle build failed), **`Tests run: X, Failures: Y`** (test failures), stack traces with `Exception`, and the stage name where it failed (e.g., `Stage 'Test' failed`). Red text indicates errors. The exit code at the end shows if the step succeeded (0) or failed (non-zero).
+
+</details>
+
 - [ ] Trigger a build manually (with or without parameters)
+
+<details>
+<summary>Answer</summary>
+
+For jobs without parameters: click the job → click **"Build Now"** on the left sidebar. For parameterized builds: click **"Build with Parameters"** → fill in the parameter values (e.g., branch name, environment, test suite) → click **"Build"**. Parameters are defined in the Jenkinsfile with `parameters { string(name: 'BRANCH', defaultValue: 'main') }`. You can also trigger builds via the Jenkins REST API: `curl -X POST http://jenkins/job/my-job/build`.
+
+</details>
+
 - [ ] Find test results and identify which tests failed
+
+<details>
+<summary>Answer</summary>
+
+Open a build → click **"Test Result"** in the left sidebar (if the pipeline publishes test results with `junit` step). The test report shows: total tests run, passed, failed, and skipped counts. Click on failed tests to see the failure message and stack trace. You can also find test results in **Console Output** by searching for `Tests run:` or `FAILED`. Some setups use plugins like **Allure Report** for richer test reports with screenshots and history.
+
+</details>
+
 - [ ] Explain the difference between Jenkins master and agents
+
+<details>
+<summary>Answer</summary>
+
+The **Jenkins master** (controller) is the main server that manages the CI/CD system — it schedules jobs, serves the web UI, stores configuration, and monitors agents. **Agents** (nodes) are separate machines that actually execute the pipeline steps. This separation allows: running builds on different OS (Linux, Windows, Mac), parallel execution across multiple agents, keeping the master lightweight, and isolating build environments. In a Jenkinsfile, `agent any` runs on any available agent, while `agent { label 'linux' }` runs on a specific agent.
+
+</details>
+
 - [ ] Understand `when` conditions for conditional stage execution
+
+<details>
+<summary>Answer</summary>
+
+The `when` directive controls whether a stage runs based on conditions. Common conditions: `when { branch 'main' }` — only run on the main branch; `when { expression { params.DEPLOY == 'true' } }` — run based on a parameter; `when { environment name: 'ENV', value: 'prod' }` — check environment variable; `when { changeset '**/*.java' }` — only if Java files changed. Multiple conditions can be combined with `allOf` (AND) or `anyOf` (OR). This enables pipelines that deploy only from specific branches or run certain tests conditionally.
+
+</details>

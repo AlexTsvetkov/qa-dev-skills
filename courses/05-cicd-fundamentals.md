@@ -511,11 +511,96 @@ Research and fill in this comparison table:
 After completing this course, you should be able to:
 
 - [ ] Explain what CI, CD (Delivery), and CD (Deployment) mean
+
+<details>
+<summary>Answer</summary>
+
+**Continuous Integration (CI)** — developers frequently merge code into a shared repository; each merge triggers automated builds and tests to catch issues early. **Continuous Delivery (CD)** — code is always in a deployable state; after passing CI, it *can* be released to production with a manual approval step. **Continuous Deployment (CD)** — every change that passes all automated tests is automatically deployed to production without manual intervention. CI → CD Delivery → CD Deployment represents increasing levels of automation.
+
+</details>
+
 - [ ] Describe the stages of a typical CI/CD pipeline
+
+<details>
+<summary>Answer</summary>
+
+A typical pipeline has these stages: **Source** (code commit triggers the pipeline), **Build** (compile code, resolve dependencies, create artifacts like JAR/WAR files), **Test** (run unit tests, integration tests, static analysis), **Deploy to Staging** (deploy the artifact to a staging environment), **Acceptance/QA Tests** (run smoke tests, regression tests, manual QA), **Deploy to Production** (release to live environment). Some pipelines also include security scanning, performance testing, and rollback stages.
+
+</details>
+
 - [ ] Explain the difference between stages, jobs, and artifacts
+
+<details>
+<summary>Answer</summary>
+
+**Stages** are logical phases of the pipeline that run sequentially (e.g., Build → Test → Deploy). **Jobs** are individual tasks within a stage that can run in parallel (e.g., "unit tests" and "integration tests" as separate jobs within the Test stage). **Artifacts** are files produced by one stage/job and passed to the next (e.g., a compiled JAR file from the Build stage is used by the Deploy stage). If a stage fails, subsequent stages are typically skipped.
+
+</details>
+
 - [ ] Understand how Git branching relates to CI/CD
+
+<details>
+<summary>Answer</summary>
+
+Different branches trigger different pipeline behaviors. **Feature branches** typically run build + unit tests only. **Pull requests / merge requests** run the full test suite before allowing merge. The **main/master branch** triggers the full pipeline including deployment to staging/production. **Release branches** may trigger deployment to production. CI/CD configs use branch rules to control which stages run for which branches, ensuring only validated code reaches production.
+
+</details>
+
 - [ ] Read a basic pipeline configuration file (YAML)
+
+<details>
+<summary>Answer</summary>
+
+Pipeline configs (e.g., `.github/workflows/*.yml`, `Jenkinsfile`, `.gitlab-ci.yml`) define: **trigger conditions** (on push, on PR, on schedule), **stages/jobs** (build, test, deploy), **steps** within each job (shell commands like `mvn build`, `npm test`), **environment variables** and **secrets**, and **artifacts** to save or pass between stages. Key elements: `on`/`trigger` (when to run), `jobs`/`stages` (what to do), `steps`/`script` (individual commands), `environment` (variables), and `artifacts`/`cache` (files to persist).
+
+</details>
+
 - [ ] Know what happens when a pipeline stage fails
+
+<details>
+<summary>Answer</summary>
+
+When a stage fails: all subsequent stages are **skipped** (the pipeline stops), the pipeline is marked as **failed** (shown in red), the team is **notified** (email, Slack, etc.), and the code change is **blocked from deployment**. The developer must fix the issue and push a new commit, which triggers the pipeline again. In a PR workflow, the failing pipeline prevents the PR from being merged. Some pipelines have "allow failure" on non-critical jobs (e.g., code style checks) that won't block the pipeline.
+
+</details>
+
 - [ ] Explain how CI/CD benefits QA work
+
+<details>
+<summary>Answer</summary>
+
+CI/CD benefits QA by: **catching bugs earlier** (automated tests run on every commit), providing **consistent environments** (staging mirrors production), enabling **automated regression testing** (tests run automatically, not manually), giving **faster feedback** (know within minutes if a change broke something), ensuring **reproducible deployments** (same process every time), and freeing QA to focus on **exploratory testing** instead of repetitive manual checks. QA can also add their own automated tests to the pipeline.
+
+</details>
+
 - [ ] Identify common CI/CD tools and their differences
+
+<details>
+<summary>Answer</summary>
+
+- **Jenkins** — open-source, self-hosted, highly customizable, uses Jenkinsfiles (Groovy), most popular in enterprise
+- **GitHub Actions** — built into GitHub, YAML config, free for public repos, great for GitHub-hosted projects
+- **GitLab CI/CD** — built into GitLab, `.gitlab-ci.yml`, integrated with GitLab's ecosystem
+- **Azure DevOps** — Microsoft's platform, YAML pipelines, integrates with Azure cloud
+- **CircleCI** — cloud-based, fast, good Docker support
+- **Travis CI** — cloud-based, popular for open-source
+
+Key differences: hosting (self-managed vs cloud), pricing, integration with source control, and configuration language.
+
+</details>
+
 - [ ] Describe the flow from code commit to production deployment
+
+<details>
+<summary>Answer</summary>
+
+1. Developer **commits code** and pushes to a feature branch
+2. Developer creates a **pull request** to merge into main
+3. CI pipeline triggers: **build** the code → **run tests** (unit, integration, static analysis)
+4. Pipeline passes → code review → PR is **merged** to main branch
+5. Main branch pipeline triggers: **build artifact** (JAR, Docker image) → **deploy to staging**
+6. QA performs **testing on staging** (smoke tests, exploratory testing, automated acceptance tests)
+7. After approval, the artifact is **deployed to production** (manually or automatically)
+8. **Post-deployment checks** (health checks, monitoring, smoke tests in production)
+
+</details>

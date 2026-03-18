@@ -312,11 +312,82 @@ Describe the DevTools steps you would take to debug:
 ## ✅ Self-Check
 
 - [ ] Open DevTools and navigate between tabs
+
+<details>
+<summary>Answer</summary>
+
+Open DevTools with **F12** (or **Cmd+Option+I** on Mac / **Ctrl+Shift+I** on Windows). The main tabs are: **Elements** (HTML/CSS inspection), **Console** (JavaScript logs and errors), **Network** (HTTP requests), **Sources** (JavaScript files/debugger), **Application** (cookies, localStorage, cache), and **Performance** (profiling). You can also right-click any element on a page and select **"Inspect"** to jump directly to it in the Elements tab.
+
+</details>
+
 - [ ] Use the Network tab to inspect API requests and responses
+
+<details>
+<summary>Answer</summary>
+
+Open the **Network** tab, then perform an action on the page (e.g., click a button, load a page). Each HTTP request appears as a row. Click a request to see: **Headers** (request method, URL, status code, request/response headers), **Payload** (request body — what was sent), **Response** (response body — what came back), **Preview** (formatted JSON response), and **Timing** (how long each phase took). The status code column shows 200 (success), 4xx (client error), 5xx (server error).
+
+</details>
+
 - [ ] Filter network requests to show only API calls (Fetch/XHR)
+
+<details>
+<summary>Answer</summary>
+
+In the Network tab, click the **"Fetch/XHR"** filter button at the top (next to All, Doc, CSS, JS, etc.). This hides all static resource requests (images, stylesheets, scripts) and shows only AJAX/API calls made by JavaScript. You can also use the **filter text box** to search by URL (e.g., type `/api/` to show only API endpoints). The **"Invert"** checkbox can show everything except what matches the filter.
+
+</details>
+
 - [ ] Find JavaScript errors in the Console
+
+<details>
+<summary>Answer</summary>
+
+Open the **Console** tab. Errors appear in **red** with an ❌ icon. Warnings appear in **yellow** with a ⚠️ icon. Each error shows: the error message, the file name and line number where it occurred, and a stack trace (click to expand). Common errors: `TypeError: Cannot read property 'x' of undefined`, `ReferenceError: x is not defined`, `SyntaxError`, network errors like `Failed to fetch`. You can filter by error level (Errors, Warnings, Info) using the dropdown.
+
+</details>
+
 - [ ] Inspect an HTML element and view its CSS styles
+
+<details>
+<summary>Answer</summary>
+
+Right-click any element on the page → **"Inspect"**. The element is highlighted in the **Elements** tab. On the right panel, the **Styles** pane shows all CSS rules applied to the element, with overridden styles shown as strikethrough. The **Computed** pane shows the final calculated values. You can edit CSS values directly in DevTools to test changes (changes are temporary — they reset on page reload). The **Box Model** section shows margin, border, padding, and content dimensions.
+
+</details>
+
 - [ ] Use the device toolbar to test responsive layouts
+
+<details>
+<summary>Answer</summary>
+
+Click the **device toolbar icon** (📱 phone/tablet icon) at the top-left of DevTools, or press **Ctrl+Shift+M** (Cmd+Shift+M on Mac). This enables responsive mode where you can: select preset devices (iPhone, iPad, Pixel, etc.), set custom dimensions (width × height), change orientation (portrait/landscape), simulate slow network speeds (3G, offline), and test touch events. This helps verify that the application looks and works correctly on different screen sizes.
+
+</details>
+
 - [ ] Check cookies and localStorage in the Application tab
+
+<details>
+<summary>Answer</summary>
+
+Open the **Application** tab (in some browsers called **Storage**). In the left sidebar: **Cookies** — expand to see cookies for each domain; shows name, value, expiration, path, secure flag. **Local Storage** — key-value pairs persisted in the browser (survives page close). **Session Storage** — key-value pairs cleared when the tab closes. You can view, edit, and delete values directly. Useful for QA: checking authentication tokens, user preferences, and session data. Click "Clear site data" to reset everything.
+
+</details>
+
 - [ ] Copy an API request as cURL from the Network tab
+
+<details>
+<summary>Answer</summary>
+
+In the **Network** tab, right-click on any request → **"Copy"** → **"Copy as cURL"**. This copies the complete cURL command including: URL, HTTP method, all headers (including cookies and authorization), and request body. You can paste this into a terminal to reproduce the exact same request, or into Postman (Import → Raw Text). This is invaluable for debugging — you can share the exact failing request with developers or reproduce API issues outside the browser.
+
+</details>
+
 - [ ] Follow a debugging workflow to identify frontend vs backend bugs
+
+<details>
+<summary>Answer</summary>
+
+**Step 1**: Open DevTools Network tab and reproduce the bug. **Step 2**: Check if an API request failed (red status, 4xx/5xx). If yes → likely a **backend bug** (check the response body for error details). **Step 3**: If API returns correct data but the UI is wrong → **frontend bug** (check Console for JS errors). **Step 4**: If no API call was made → **frontend bug** (event handler or routing issue). **Step 5**: If the request was sent with wrong data (check Payload tab) → **frontend bug** (wrong parameters sent). Copy the failing request as cURL and include it in your bug report.
+
+</details>
